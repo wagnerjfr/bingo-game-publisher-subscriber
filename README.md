@@ -2,14 +2,14 @@
 
 It's a publisher/subscriber multi-thread Bingo simulation game with 5 players.
 
-Mary, John, Mark, Ana and Paul try their luck in a Bingo. Who is going to win?
+`Mary`, `John`, `Mark`, `Ana` and `Paul` try their luck in a Bingo. Who is going to win?
 
 Each player has one card with 8 numbers (randomly selected from 1 to 50).
 
-Who first fills all the numbers, announced by the Caller, wins!
+Who first fills all the numbers, announced by the `Caller`, wins!
 
 Sample output:
-```
+```console
 Available numbers: [1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50]
 ## Caller: the number is.. 2
 Mary: :( Noo..
