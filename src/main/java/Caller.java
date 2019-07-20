@@ -3,15 +3,12 @@ import java.util.List;
 
 public class Caller implements Publisher, Runnable {
     private List<Listener> subscribers;
-    private List<Integer> numbers;
+    private Roulette roulette;
     private Listener winner = null;
 
     public Caller() {
         subscribers = new ArrayList<Listener>();
-        numbers = new ArrayList<Integer>(50);
-        for (int i = 1; i <= 50; i++) {
-            numbers.add(i);
-        }
+        roulette = new Roulette();
     }
 
     public void subscribe(Listener listener) {
@@ -33,7 +30,7 @@ public class Caller implements Publisher, Runnable {
         int number;
         try {
             while (winner == null) {
-                number = callNumber();
+                number = roulette.getNumber();
                 System.out.println("## Caller: the number is.. " + number);
                 sendNumber(number);
                 Thread.sleep(50);
@@ -49,13 +46,5 @@ public class Caller implements Publisher, Runnable {
         for (Listener subscriber : subscribers) {
             subscriber.onEvent(number);
         }
-    }
-
-    private int callNumber() {
-        int random = (int)(Math.random() * numbers.size());
-        int number = numbers.get(random);
-        numbers.remove(random);
-        System.out.println("Available numbers: " + numbers);
-        return number;
     }
 }

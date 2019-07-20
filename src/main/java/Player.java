@@ -4,23 +4,14 @@ public class Player implements Listener, Runnable {
 
     private String name;
     private Publisher caller;
+    private Card card;
     private boolean hasWinner = false;
-    private Map<Integer, Boolean> card;
 
     public Player(String name, Publisher caller) {
         this.name = name;
         this.caller = caller;
         caller.subscribe(this);
-
-        card = new TreeMap<Integer, Boolean>();
-        int i = 0;
-        while (i < 9) {
-            int random = (int)(Math.random() * 50 + 1);
-            if (!card.containsKey(random)) {
-                card.put(random, false);
-                i++;
-            }
-        }
+        card = new Card();
     }
 
     public void run() {
@@ -29,27 +20,16 @@ public class Player implements Listener, Runnable {
 
     public void onEvent(Integer number) {
         if (card.containsKey(number)) {
-            card.put(number, true);
+            card.markNumber(number);
             System.out.println(name + ": :) YES!");
         }
         else {
             System.out.println(name + ": :( Noo..");
         }
         System.out.println(name + ": " + card);
-        if (checkCard()) {
+        if (card.checkCard()) {
             caller.inform(this);
         }
-    }
-
-    private boolean checkCard() {
-        boolean result = true;
-        for (Map.Entry<Integer, Boolean> c : card.entrySet()) {
-            if (!c.getValue()) {
-                result = false;
-                break;
-            }
-        }
-        return result;
     }
 
     public String getName() {
