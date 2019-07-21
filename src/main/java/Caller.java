@@ -7,7 +7,7 @@ public class Caller implements Publisher, Runnable {
     private Listener winner = null;
 
     public Caller() {
-        subscribers = new ArrayList<Listener>();
+        subscribers = new ArrayList<>();
         roulette = new Roulette();
     }
 

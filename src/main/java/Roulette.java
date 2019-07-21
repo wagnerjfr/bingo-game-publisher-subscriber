@@ -6,7 +6,7 @@ public class Roulette {
     private List<Integer> numbers;
 
     public Roulette() {
-        numbers = new ArrayList<Integer>(50);
+        numbers = new ArrayList<>(50);
         for (int i = 1; i <= 50; i++) {
             numbers.add(i);
         }

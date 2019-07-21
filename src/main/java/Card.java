@@ -6,7 +6,7 @@ public class Card {
     private Map<Integer, Boolean> numbers;
 
     public Card() {
-        numbers = new TreeMap<Integer, Boolean>();
+        numbers = new TreeMap<>();
         int i = 0;
         while (i < 8) {
             int random = (int)(Math.random() * 50 + 1);
