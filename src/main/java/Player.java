@@ -28,6 +28,7 @@ public class Player implements Listener, Runnable {
         }
         System.out.println(name + ": " + card);
         if (card.checkCard()) {
+            System.out.println(name + ": :) BINGOO!!!");
             caller.inform(this);
         }
     }
