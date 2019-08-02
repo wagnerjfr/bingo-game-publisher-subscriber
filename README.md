@@ -9,19 +9,19 @@ Each player has one card with 8 numbers (randomly selected from 1 to 50).
 Who first fills all the numbers in the card `BINGO!`, wins!
 
 ### Steps to run the application:
-1. Clone the project:
+#### 1. Clone the project:
 ```
 $ https://github.com/wagnerjfr/bingo-game-publisher-subscriber.git
 ```
-2. Get into the directory:
+#### 2. Get into the directory:
 ```
 $ cd bingo-game-publisher-subscriber
 ```
-3. Run Maven package:
+#### 3. Run Maven package:
 ```
 $ mvn package
 ```
-4. Launch the application:
+#### 4. Launch the application:
 ```
 $ java -jar target/bingo-1.0-SNAPSHOT.jar
 ```
