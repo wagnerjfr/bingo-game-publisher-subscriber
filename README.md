@@ -1,6 +1,6 @@
 # :busts_in_silhouette: `bingo-game-publisher-subscriber`
 
-It's a publisher/subscriber multi-thread Bingo simulation game with 5 players.
+It's a *publisher/subscriber* multi-thread **Bingo simulation game** with 5 players.
 
 `Mary`, `John`, `Mark`, `Ana` and `Paul` try their luck in a Bingo. Who is going to win?
 
