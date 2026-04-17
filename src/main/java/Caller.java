@@ -1,14 +1,16 @@
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Caller implements Publisher, Runnable {
-    private List<Listener> subscribers;
-    private Roulette roulette;
-    private Listener winner = null;
+    private final List<Listener> subscribers;
+    private final Roulette roulette;
+    private final AtomicReference<Listener> winner;
 
     public Caller() {
-        subscribers = new ArrayList<>();
+        subscribers = new CopyOnWriteArrayList<>();
         roulette = new Roulette();
+        winner = new AtomicReference<>();
     }
 
     public void subscribe(Listener listener) {
@@ -20,25 +22,30 @@ public class Caller implements Publisher, Runnable {
     }
 
     public void inform(Listener winner) {
-        this.winner = winner;
-        for (Listener subscriber : subscribers) {
-            subscriber.stop();
+        if (this.winner.compareAndSet(null, winner)) {
+            for (Listener subscriber : subscribers) {
+                subscriber.stop();
+            }
         }
     }
 
     public void run() {
         int number;
         try {
-            while (winner == null) {
+            while (winner.get() == null && roulette.hasNumbers()) {
                 number = roulette.getNumber();
-                System.out.println("## Caller: the number is.. " + number);
+                GameLogger.callerNumber(number);
                 sendNumber(number);
                 Thread.sleep(50);
             }
-            System.out.println("## Caller: THE WINNER IS " + ((Player)winner).getName().toUpperCase() + " !!!");
-            System.exit(0);
+            Listener currentWinner = winner.get();
+            if (currentWinner != null) {
+                GameLogger.winner(currentWinner.getListenerName());
+            } else {
+                GameLogger.noWinner();
+            }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 

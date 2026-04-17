@@ -1,11 +1,12 @@
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Player implements Listener, Runnable {
 
-    private String name;
-    private Publisher caller;
-    private Card card;
-    private boolean hasWinner = false;
+    private final String name;
+    private final Publisher caller;
+    private final Card card;
+    private final AtomicBoolean hasWinner = new AtomicBoolean(false);
 
     public Player(String name, Publisher caller) {
         this.name = name;
@@ -15,20 +16,30 @@ public class Player implements Listener, Runnable {
     }
 
     public void run() {
-        while (!hasWinner) {  }
+        synchronized (this) {
+            while (!hasWinner.get()) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+            }
+        }
     }
 
     public void onEvent(Integer number) {
-        if (card.containsKey(number)) {
+        if (hasWinner.get()) {
+            return;
+        }
+        if (card.containsNumber(number)) {
             card.markNumber(number);
-            System.out.println(name + ": :) YES!");
+            GameLogger.playerHit(name, card);
+        } else {
+            GameLogger.playerMiss(name, card);
         }
-        else {
-            System.out.println(name + ": :( Noo..");
-        }
-        System.out.println(name + ": " + card);
         if (card.checkCard()) {
-            System.out.println(name + ": :) BINGOO!!!");
+            GameLogger.playerBingo(name);
             caller.inform(this);
         }
     }
@@ -37,7 +48,15 @@ public class Player implements Listener, Runnable {
         return this.name;
     }
 
+    @Override
+    public String getListenerName() {
+        return name;
+    }
+
     public void stop() {
-        hasWinner = true;
+        hasWinner.set(true);
+        synchronized (this) {
+            notifyAll();
+        }
     }
 }

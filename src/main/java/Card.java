@@ -1,23 +1,30 @@
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 
 public class Card {
 
-    private Map<Integer, Boolean> numbers;
+    private final Map<Integer, Boolean> numbers;
+    private final Random random;
 
     public Card() {
+        this(new Random());
+    }
+
+    public Card(Random random) {
+        this.random = random;
         numbers = new TreeMap<>();
         int i = 0;
         while (i < 8) {
-            int random = (int)(Math.random() * 50 + 1);
-            if (!numbers.containsKey(random)) {
-                numbers.put(random, false);
+            int nextNumber = random.nextInt(50) + 1;
+            if (!numbers.containsKey(nextNumber)) {
+                numbers.put(nextNumber, false);
                 i++;
             }
         }
     }
 
-    public boolean containsKey(int number) {
+    public boolean containsNumber(int number) {
         return numbers.containsKey(number);
     }
 
