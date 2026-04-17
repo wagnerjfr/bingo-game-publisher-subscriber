@@ -6,11 +6,17 @@ public class Player implements Listener, Runnable {
     private final String name;
     private final Publisher caller;
     private final Card card;
+    private final GameEventListener gameEventListener;
     private final AtomicBoolean hasWinner = new AtomicBoolean(false);
 
     public Player(String name, Publisher caller) {
+        this(name, caller, GameEventListener.NONE);
+    }
+
+    public Player(String name, Publisher caller, GameEventListener gameEventListener) {
         this.name = name;
         this.caller = caller;
+        this.gameEventListener = gameEventListener;
         caller.subscribe(this);
         card = new Card();
     }
@@ -35,8 +41,10 @@ public class Player implements Listener, Runnable {
         if (card.containsNumber(number)) {
             card.markNumber(number);
             GameLogger.playerHit(name, card);
+            gameEventListener.onPlayerUpdate(name, card.getNumbersSnapshot(), true);
         } else {
             GameLogger.playerMiss(name, card);
+            gameEventListener.onPlayerUpdate(name, card.getNumbersSnapshot(), false);
         }
         if (card.checkCard()) {
             GameLogger.playerBingo(name);

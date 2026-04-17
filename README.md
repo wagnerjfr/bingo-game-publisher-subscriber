@@ -12,6 +12,13 @@ Who first fills all the numbers in the card `BINGO!`, wins!
 ### [Java Multi-Threading in Action: Implementing a Competitive Bingo Game](https://medium.com/itnext/java-multi-threading-in-action-implementing-a-competitive-bingo-game-023429a5c6cc)
 _Publish-Subscribe Showdown: Five Players Vie for Bingo Supremacy_
 
+## What's New
+
+- Added a **Swing UI mode** (`MainSwing`) with live game visualization.
+- Added configurable caller draw delay (**sleep option**) in both console and UI modes.
+- Added `GameEventListener` to bridge engine events to UI updates.
+- Migrated orchestration to `ExecutorService` for cleaner thread lifecycle management.
+
 ## Concurrency and Design Notes
 
 Recent improvements applied to the project:
@@ -25,6 +32,26 @@ Recent improvements applied to the project:
 - Improved naming clarity in `Card` (`containsNumber` instead of `containsKey`).
 - Increased testability by supporting injectable `Random` in `Card` and `Roulette` constructors.
 
+## Swing UI (Latest)
+
+The project now includes a Swing-based interface:
+
+- `MainSwing`: UI entry point
+- `BingoFrame`: main window with controls and game state
+- `PlayerPanel`: visual card component for each player
+
+### UI Features
+
+- **Start/Stop** game controls
+- **Current number** display
+- **5 live player panels** (Mary, John, Mark, Ana, Paul)
+- **Card updates in real time** (hit/miss feedback)
+- **Winner highlight** on winning player panel
+- **Event log** panel
+- **Delay (ms)** spinner to control draw speed before starting
+
+All Swing updates are executed safely on the EDT via `SwingUtilities.invokeLater(...)`.
+
 ## Execution Model (Latest)
 
 The application now uses `ExecutorService` in `Main` instead of manual thread creation:
@@ -35,6 +62,17 @@ The application now uses `ExecutorService` in `Main` instead of manual thread cr
 - interruption-safe fallback with `shutdownNow()`
 
 This makes lifecycle handling clearer and easier to maintain.
+
+## Engine ↔ UI Event Bridge
+
+`GameEventListener` was introduced so game logic can notify external listeners (like the Swing UI) without coupling core engine classes to UI components.
+
+Events include:
+
+- number drawn
+- player card update (with hit/miss)
+- winner found
+- no-winner outcome
 
 ## Logging Strategy (Latest)
 
@@ -72,9 +110,39 @@ Run:
 mvn -q exec:java -Dexec.mainClass=Main
 ```
 
+Run with custom delay (ms) using CLI args (example: `150`):
+
+```bash
+mvn -q exec:java -Dexec.mainClass=Main -Dexec.args="150"
+```
+
+Run with custom caller delay in milliseconds (example: 150ms):
+
+```bash
+mvn -q exec:java -Dexec.mainClass=Main -Dexec.args="150"
+```
+
 Or build a jar and run it:
 
 ```bash
 mvn -q package
 java -jar target/bingo-1.0-SNAPSHOT.jar
 ```
+
+Swing UI mode:
+
+```bash
+mvn -q exec:java -Dexec.mainClass=MainSwing
+```
+
+In Swing mode, delay is configurable via the **Delay (ms)** control before pressing Start.
+
+## Key Classes
+
+- `Caller`: publisher + game loop, winner control, configurable draw delay
+- `Player`: listener/subscriber with card marking logic
+- `Card`: 8-number card model with mark/check helpers
+- `Roulette`: random draw source from 1..50 without repetition
+- `GameEventListener`: engine event callback contract
+- `GameLogger`: centralized logging with verbose/compact roulette modes
+- `BingoFrame` / `PlayerPanel`: Swing UI layer

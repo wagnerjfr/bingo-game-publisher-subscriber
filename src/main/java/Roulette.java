@@ -31,4 +31,8 @@ public class Roulette {
         return !numbers.isEmpty();
     }
 
+    public List<Integer> getRemainingNumbersSnapshot() {
+        return new ArrayList<>(numbers);
+    }
+
 }
