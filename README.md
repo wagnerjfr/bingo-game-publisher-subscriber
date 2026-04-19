@@ -8,9 +8,12 @@ Each player has one card with 8 numbers (randomly selected from **1 to 50**).
 
 Who first fills all the numbers in the card `BINGO!`, wins!
 
-## Full Article:
-### [Java Multi-Threading in Action: Implementing a Competitive Bingo Game](https://medium.com/itnext/java-multi-threading-in-action-implementing-a-competitive-bingo-game-023429a5c6cc)
+## Full Articles:
+### ⭐ [Java Multi-Threading in Action: Implementing a Competitive Bingo Game](https://medium.com/itnext/java-multi-threading-in-action-implementing-a-competitive-bingo-game-023429a5c6cc)
 _Publish-Subscribe Showdown: Five Players Vie for Bingo Supremacy_
+
+### ⭐ [Java Multi-Threading in Action (Update): Building a Competitive Bingo Game with Publisher/Subscriber + Swing UI](https://medium.com/itnext/java-multi-threading-in-action-update-building-a-competitive-bingo-game-with-5790c23cb277)
+_From console simulation to event-driven architecture, safer concurrency, and live UI visualization_
 
 ## What's New
 
